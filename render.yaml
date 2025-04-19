@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: squidex
+    env: docker
+    plan: free
+    dockerContext: .
+    dockerfilePath: ""
+    autoDeploy: true
+    healthCheckPath: /healthz
+    envVars:
+      - key: SQUIDEX_DOMAIN
+        value: squidex.onrender.com
+      - key: SQUIDEX_ADMINEMAIL
+        value: admin@example.com
+      - key: SQUIDEX_ADMINPASSWORD
+        value: admin123

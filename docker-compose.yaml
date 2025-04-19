@@ -1,0 +1,26 @@
+version: "3.5"
+
+services:
+  squidex_mongo:
+    image: "mongo:6"
+    restart: unless-stopped
+    networks:
+      - internal
+
+  squidex:
+    image: "squidex/squidex:7"
+    restart: unless-stopped
+    depends_on:
+      - squidex_mongo
+    networks:
+      - internal
+    ports:
+      - "10000:5000" # Porta que o Render expõe
+    environment:
+      - URLS__BASEURL=https://${SQUIDEX_DOMAIN}
+      - EVENTSTORE__TYPE=MongoDB
+      - EVENTSTORE__MONGODB__CONFIGURATION=mongodb://squidex_mongo
+      - STORE__MONGODB__CONFIGURATION=mongodb://squidex_mongo
+      - IDENTITY__ADMINEMAIL=${SQUIDEX_ADMINEMAIL}
+      - IDENTITY__ADMINPASSWORD=${SQUIDEX_ADMINPASSWORD}
+      - ASPNETCORE_URLS=http://+:5000
